@@ -35,6 +35,7 @@ import { WakeWordRecognizer } from "@/live/WakeWordRecognizer";
 import { MeetingProvider } from "@/meetings/MeetingProvider";
 import { usePrefsContext } from "@/util/PrefsProvider";
 import { useWindowFocused } from "@/util/use-window-focused";
+import { VoiceAssistant } from "@/tools";
 import { IconButton, Spinner, Tooltip } from "@radix-ui/themes";
 import { Node } from "@xyflow/react";
 import cn from "classnames";
@@ -77,6 +78,7 @@ function EditorInner({ docId }: Props) {
   const windowFocused = useWindowFocused();
   const liveApiRef = useRef<LiveAPIContext>(null);
   const canvasRef = useRef<CanvasRef>(null);
+  const [editor, setEditor] = useState<any>(null);
   const { docRef, docLoading, metadata, updateMetadata } = useDocumentContext();
   const [aiGenerating, setAiGenerating] = useState(false);
   const [splitSize, setSplitSize] = useState(70);
@@ -576,7 +578,20 @@ ${prompt}
             <Header />
             <main style={{ ["--split-size" as any]: `${splitSize}%` }}>
               <div className={styles.canvasContainer}>
-                <Canvas ref={canvasRef} />
+                <Canvas ref={canvasRef} onEditorReady={setEditor} />
+                {/* Voice Assistant */}
+                {editor && (
+                  <div
+                    style={{
+                      position: "fixed",
+                      bottom: "2rem",
+                      right: "2rem",
+                      zIndex: "1000",
+                    }}
+                  >
+                    <VoiceAssistant editor={editor} useAI={true} />
+                  </div>
+                )}
                 {/* Only Ask Gemini button - moved to top right */}
                 <div className={styles.geminiButtonContainer}>
                   {!aiGenerating && (
