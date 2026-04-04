@@ -38,10 +38,23 @@ export function RouterGate() {
   const docId = window.location.pathname.replace(/^\//, "");
 
   useEffect(() => {
-    if (user && !docId) {
-      window.location.pathname = generateId();
+    if (!user || docId) return;
+
+    const lastDocId = localStorage.getItem("lastDocId");
+    const targetId = lastDocId || generateId();
+
+    if (!lastDocId) {
+      localStorage.setItem("lastDocId", targetId);
     }
+
+    window.location.pathname = targetId;
   }, [user, docId]);
+
+  useEffect(() => {
+    if (docId) {
+      localStorage.setItem("lastDocId", docId);
+    }
+  }, [docId]);
 
   return docId ? <Editor docId={docId} /> : <Loading />;
 }

@@ -61,30 +61,34 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   useEffect(() => {
-    let unsub = onAuthStateChanged(auth, async (user) => {
+    const mockId = new URLSearchParams(window.location.search).get("mock");
+
+    if (mockId) {
+      const { name, img } =
+        MOCK_INFO[(Number(mockId) - 1) % MOCK_INFO.length] || MOCK_INFO[0];
+      const slug = name.toLowerCase();
+
+      setAuthLoaded(true);
+      setHasAccess("true");
+      setUser({
+        email: `${slug}@example.com`,
+        uid: `mock:${slug}`,
+        photoURL: `https://i.pravatar.cc/150?img=${img}`,
+        displayName: name,
+        providerId: "mock",
+        phoneNumber: null,
+      });
+
+      return;
+    }
+
+    const unsub = onAuthStateChanged(auth, async (user) => {
       void (await user?.getIdTokenResult());
       setAuthLoaded(true);
-      // For development: allow access without invite code
       setHasAccess("true");
-      let mockId = new URLSearchParams(window.location.search).get("mock");
-      if (!user) {
-        setUser(null);
-      } else if (mockId) {
-        let { name, img } =
-          MOCK_INFO[(Number(mockId) - 1) % MOCK_INFO.length] || MOCK_INFO[0];
-        let slug = name.toLowerCase();
-        setUser({
-          email: `${slug}@example.com`,
-          uid: `mock:${slug}`,
-          photoURL: `https://i.pravatar.cc/150?img=${img}`,
-          displayName: name,
-          providerId: "google",
-          phoneNumber: null,
-        });
-      } else {
-        setUser(user);
-      }
+      setUser(user ?? null);
     });
+
     return () => unsub();
   }, []);
 

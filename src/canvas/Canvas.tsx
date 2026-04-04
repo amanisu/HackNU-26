@@ -1,15 +1,12 @@
-/**
- * @license
- * Copyright 2026 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { forwardRef, useState } from "react";
 import { Tldraw, type Editor } from "tldraw";
 import "tldraw/tldraw.css";
 import { XYPosition } from "@xyflow/react";
 import cn from "classnames";
 import styles from "./Canvas.module.scss";
+import type { DatabaseReference } from "firebase/database";
+import { useTldrawFirebaseSync } from "./useTldrawFirebaseSync";
+
 
 export type CanvasRef = {
   fit: () => void;
@@ -22,13 +19,17 @@ export type CanvasRef = {
 type Props = {
   className?: string;
   onEditorReady?: (editor: Editor) => void;
+  tldrawDocRef?: DatabaseReference;
 };
 
 export const Canvas = forwardRef<CanvasRef, Props>(
-  ({ className, onEditorReady }, ref) => {
+  ({ className, onEditorReady, tldrawDocRef }, ref) => {
     const [editor, setEditor] = useState<Editor | undefined>(undefined);
 
-    // Set ref methods (can be no-op as tldraw handles these internally)
+    useTldrawFirebaseSync(editor, tldrawDocRef);
+    console.log("[Canvas] editor =", !!editor);
+    console.log("[Canvas] tldrawDocRef =", tldrawDocRef?.toString());
+
     if (ref && typeof ref !== "function") {
       ref.current = {
         fit: () => editor?.zoomToFit(),
@@ -40,6 +41,7 @@ export const Canvas = forwardRef<CanvasRef, Props>(
     }
 
     const handleEditorReady = (editor: Editor) => {
+      console.log("[Canvas] editor mounted");
       setEditor(editor);
       onEditorReady?.(editor);
     };

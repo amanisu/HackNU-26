@@ -82,11 +82,13 @@ export function CanvasDataProvider({
 
   // Sync canvas from RTDB
   useEffect(() => {
+    console.log('[CanvasDataProvider] Setting up listener on:', String(dataRef));
     let unsub = onValue(dataRef, (ss) => {
       let { nodes, edges }: SerializedCanvasData = ss.val() || {
         nodes: [],
         edges: [],
       };
+      console.log('[CanvasDataProvider] Data received:', { nodeCount: Object.keys(nodes || {}).length, edgeCount: Object.keys(edges || {}).length });
       setNodesRaw((existingNodes) => {
         let newNodes: Node[] = [];
         let newIds = new Set();
@@ -153,7 +155,10 @@ export function CanvasDataProvider({
         ) {
           valToSet = null as any; // this is an empty project
         }
-        set(child(dataRef, "nodes"), valToSet);
+        console.log('[CanvasDataProvider] Writing nodes:', Object.keys(valToSet || {}).length, 'to', String(child(dataRef, "nodes")));
+        set(child(dataRef, "nodes"), valToSet).catch((err) => {
+          console.error('[CanvasDataProvider] Write error:', err);
+        });
         return newNodes;
       });
     },

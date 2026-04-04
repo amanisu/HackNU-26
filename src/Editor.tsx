@@ -51,6 +51,8 @@ import { distanceToRect, sleep } from "./canvas/util";
 import { Splitter } from "./components/splitter/Splitter";
 import { generateMiniApp } from "./miniapp-generator/miniapp-generator";
 import { screenshotMiniApp } from "./miniapp/screenshotter";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase";
 
 type Props = { docId: string };
 
@@ -579,8 +581,39 @@ ${prompt}
             <main style={{ ["--split-size" as any]: `${splitSize}%` }}>
               <div className={styles.canvasContainer}>
                 <Canvas ref={canvasRef} onEditorReady={setEditor} />
-                {/* Voice Chat - Minimal circular button */}
-                {editor && <VoiceChat editor={editor} useAI={true} />}
+                {/* Voice Assistant */}
+                {editor && (
+                  <div
+                    style={{
+                      position: "fixed",
+                      bottom: "2rem",
+                      right: "2rem",
+                      zIndex: "1000",
+                    }}
+                  >
+                    <VoiceAssistant editor={editor} useAI={true} />
+                  </div>
+                )}
+                {/* Only Ask Gemini button - moved to top right */}
+                <div className={styles.geminiButtonContainer}>
+                  {!aiGenerating && (
+                    <Command label="Ask Gemini" keyName="g">
+                      <LiveButton className={styles.geminiButton} />
+                    </Command>
+                  )}
+                  {aiGenerating && (
+                    <Tooltip content="Generating... (Click to stop)">
+                      <IconButton
+                        radius="full"
+                        // @ts-expect-error
+                        color={"accent"}
+                        variant="solid"
+                      >
+                        <Spinner size="2" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </div>
               </div>
               {inspectingNode && (
                 <>
