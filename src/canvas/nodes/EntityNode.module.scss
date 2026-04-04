@@ -1,0 +1,22 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.node {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 11px;
+  line-height: 16px;
+  color: rgba(255 255 255 / 0.6)
+}

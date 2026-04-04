@@ -1,0 +1,81 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@property --stroke-angle {
+  syntax: "<angle>";
+  initial-value: 180deg;
+  inherits: false;
+}
+
+.peerCursorAnnotation {
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  position: relative;
+  width: 24px;
+  height: 24px;
+
+  &.isHidden {
+    opacity: 0;
+  }
+
+  .label {
+    --stroke-angle: 180deg;
+    --stroke-color-1: white;
+    --stroke-color-2: color-mix(in srgb, var(--stroke-color-1) 50%, var(--color));
+    position: absolute;
+    left: 80%;
+    top: 50%;
+    background-image:
+      linear-gradient(var(--color), var(--color)),
+      conic-gradient(
+        from var(--stroke-angle),
+        var(--stroke-color-2) 15%,
+        var(--stroke-color-1) 25%,
+        var(--stroke-color-2) 35%,
+        var(--stroke-color-2) 65%,
+        var(--stroke-color-1) 75%,
+        var(--stroke-color-2) 85%
+      );
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border: 1px solid transparent;
+    color: black;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 16px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  &.isDark .label {
+    color: white;
+  }
+
+  &.isAiGlow .label {
+    animation:
+      aiGlow 2s ease-in-out infinite alternate,
+      aiStroke 2s linear infinite;
+  }
+}
+
+@keyframes aiGlow {
+  0% {
+    box-shadow: 0 0 20px 5px var(--color);
+  }
+  100% {
+    box-shadow: 0 0 10px var(--color);
+  }
+}
+
+@keyframes aiStroke {
+  0% {
+    --stroke-angle: 0deg;
+  }
+  100% {
+    --stroke-angle: 360deg;
+  }
+}

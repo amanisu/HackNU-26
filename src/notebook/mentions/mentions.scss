@@ -1,0 +1,70 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* Basic editor styles */
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  .mention {
+    background-color: var(--gray-8);
+    border-radius: 0.4rem;
+    box-decoration-break: clone;
+    color: var(--gray-12);
+    padding: 0.1rem 0.3rem;
+
+    .mention-icon {
+      position: relative;
+      white-space: nowrap;
+      top: 2px; // easier than messing with vertical-align
+
+      svg {
+        width: 1em;
+        height: 1em;
+      }
+    }
+
+    &::after {
+      content: "\200B";
+    }
+  }
+
+  /* Suggestion inline decoration styles (created by @tiptap/suggestion)
+     Visible highlight to help see the active suggestion range in demos */
+  [data-decoration-id] {
+    /* Reuse theme variables from demos setup for consistent look */
+    background-color: var(--accent-12);
+    border-bottom: 1px dashed var(--accent-11);
+    border-radius: 0.2rem;
+    padding: 0 0.18rem;
+    box-decoration-break: clone;
+  }
+
+  /* When the decoration is empty (no query), add a subtle hint */
+  [data-decoration-id].is-empty::after {
+    content: "\00A0";
+    border-bottom: 1px dotted var(--accent-12);
+  }
+
+  /* Make suggestion decoration visually match mention nodes */
+  .suggestion {
+    background-color: var(--accent-8);
+    border-radius: 0.4rem;
+    box-decoration-break: clone;
+    color: var(--accent-12);
+    padding: 0.1rem 0.3rem;
+  }
+
+  .suggestion::after {
+    content: "\200B";
+  }
+
+  .suggestion.is-empty::after {
+    content: "\00A0";
+    border-bottom: 1px dotted var(--accent-10);
+  }
+}

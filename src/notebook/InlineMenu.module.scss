@@ -1,0 +1,68 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.inlineMenu {
+  z-index: 444;
+  height: auto;
+  max-height: 330px;
+  width: 18rem;
+  overflow-y: auto;
+  background-color: var(--gray-5);
+  padding: 4px;
+  border-radius: var(--radius-3);
+  border: 1px solid var(--gray-7);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+
+  .item {
+    appearance: none;
+    cursor: pointer;
+    font: inherit;
+    border: 0;
+    display: grid;
+    grid-template:
+      'icon title' auto
+      'icon description' auto
+      / auto 1fr;
+    width: stretch;
+    align-items: center;
+    gap: 0 16px;
+    border-radius: var(--radius-2);
+    padding: 4px 12px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+    background-color: transparent;
+    color: var(--gray-12);
+
+    .title {
+      grid-area: title;
+    }
+
+    .description {
+      grid-area: description;
+      font-size: 13px;
+      line-height: 16px;
+      color: var(--gray-11);
+    }
+
+    .icon {
+      grid-area: icon;
+      display: flex;
+    }
+
+    &:hover {
+      background-color: var(--gray-6);
+    }
+
+    &:hover.isSelected,
+    &.isSelected {
+      background-color: var(--gray-7);
+    }
+  }
+}

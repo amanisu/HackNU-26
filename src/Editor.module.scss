@@ -1,0 +1,82 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@use "@/shared.lib" as lib;
+
+.editor {
+  background-color: var(--gray-3);
+  width: 100vw;
+  height: 100svh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 16px;
+}
+
+.editor main {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.canvasContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border: 1px solid var(--gray-6);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.liveButton {
+  color: #391353;
+  --size: 48px;
+}
+
+.geminiButtonContainer {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: all;
+}
+
+.geminiButton {
+  color: #391353;
+  --size: 48px;
+}
+
+.inspectorPanel {
+  display: flex;
+  border: 1px solid var(--gray-6);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  width: calc(100% - var(--split-size) - 19px);
+  flex: 0 0 auto;
+}
+
+@media screen and (max-width: 600px) {
+  .editor.isShowingInspector {
+    .canvasContainer {
+      display: none;
+    }
+
+    .splitter {
+      display: none;
+    }
+
+    .inspectorPanel {
+      width: 100%;
+    }
+  }
+}

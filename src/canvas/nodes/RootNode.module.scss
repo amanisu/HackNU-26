@@ -1,0 +1,25 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.node {
+  font-family: 'IBM Plex Serif';
+  font-weight: normal;
+  font-style: italic;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  padding: 0;
+}
+
+.prompt {
+  max-width: 340px;
+  padding: 16px 24px;
+  text-align: center;
+
+  &:global(.is-placeholder) {
+    color: var(--gray-9);
+  }
+}

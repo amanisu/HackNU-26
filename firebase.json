@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/firebase/firebase-tools/refs/heads/master/schema/firebase-config.json",
+  "hosting": {
+    "site": "hacknu-43ca6",
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

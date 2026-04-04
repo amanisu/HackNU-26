@@ -1,0 +1,139 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@property --orb-color-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fff;
+}
+
+@property --orb-color-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: none;
+}
+
+@property --orb-color-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: none;
+}
+
+@property --orb-color-4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: none;
+}
+
+@property --orb-color-5 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: none;
+}
+
+@property --throb {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+@property --outer-mask {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+:where(.orb) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background-color: transparent;
+  box-sizing: border-box;
+  width: var(--size, 48px);
+  height: var(--size, 48px);
+  color: currentColor;
+  transform: scale(1);
+  transition: transform 0.2s ease;
+  border-radius: 999px;
+  outline-offset: 2px;
+  outline: 2px solid transparent;
+
+  &:hover {
+    transform: scale(1.05);
+
+    &::after {
+      opacity: 0.15;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--orb-color-1);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background-color: white;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+}
+
+.shaderContainer {
+  position: absolute;
+  width: 300%;
+  height: 300%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  --outer-mask: 0;
+  transition: --outer-mask 0.2s ease;
+  mask-image: radial-gradient(
+    circle closest-side at 50% 50%,
+    black 33.33%,
+    rgba(0, 0, 0, 0.5) 34%,
+    transparent calc(34% + var(--outer-mask) * 49%)
+  );
+}
+
+.orb.isConnected .shaderContainer {
+  --outer-mask: 1;
+}
+
+.shader {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  --glow-start: calc(50% + var(--throb) * 25% + calc(var(--ai-volume) * 25%));
+  mask-image: radial-gradient(
+    circle closest-side at 50% 50%,
+    black 34%,
+    transparent calc(var(--glow-start) + 20%)
+  );
+}
+
+.orb.isConnected .shader {
+  animation: throb 2s ease infinite;
+}
+
+@keyframes throb {
+  0%,
+  100% {
+    --throb: 1;
+  }
+  50% {
+    --throb: 0;
+  }
+}

@@ -1,0 +1,23 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.shortcut {
+  --border-color: color-mix(in srgb, currentColor 20%, transparent);
+  display: inline-flex;
+  background-color: transparent;
+  color: inherit;
+  box-shadow: 0 0 0 1px var(--border-color), 0 1.5px 0 var(--border-color);
+  border-radius: 4px;
+  padding: 1px 4px;
+  height: min-content;
+  line-height: 1;
+  height: 1em;
+
+  &.ghost {
+    box-shadow: none;
+    padding: 0;
+  }
+}

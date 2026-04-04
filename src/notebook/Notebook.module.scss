@@ -1,0 +1,82 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.notebook {
+  outline: 0;
+}
+
+:global .tiptap {
+  outline: none;
+  width: 100%;
+  min-height: 50vh;
+
+  .is-empty::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: var(--gray-9);
+    pointer-events: none;
+    height: 0;
+  }
+
+  pre {
+    font-family: var(--font-family-code);
+
+    .hljs-comment,
+    .hljs-quote {
+      color: var(--gray-11);
+    }
+
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-tag,
+    .hljs-attribute .hljs-name,
+    .hljs-regexp,
+    .hljs-link,
+    .hljs-name,
+    .hljs-selector-id,
+    .hljs-selector-class {
+      color: var(--red-11);
+    }
+
+    .hljs-attr {
+      color: var(--blue-11);
+    }
+
+    .hljs-number,
+    .hljs-meta,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-literal,
+    .hljs-type,
+    .hljs-params {
+      color: var(--amber-11);
+    }
+
+    .hljs-string,
+    .hljs-symbol,
+    .hljs-bullet {
+      color: var(--jade-11);
+    }
+
+    .hljs-title,
+    .hljs-section {
+      color: var(--amber-11);
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag {
+      color: var(--cyan-11);
+    }
+
+    .hljs-emphasis {
+      font-style: italic;
+    }
+
+    .hljs-strong {
+      font-weight: 700;
+    }
+  }
+}

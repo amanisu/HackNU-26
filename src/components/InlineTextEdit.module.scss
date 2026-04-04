@@ -1,0 +1,35 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+:where(.inlineTextEditTarget,
+  .inlineTextEditInput) {
+  background-color: transparent;
+  color: currentColor;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  outline: 0;
+  text-align: unset;
+}
+
+:where(.inlineTextEditTarget):focus-visible {
+  outline: 2px solid var(--accent-8);
+}
+
+:where(.inlineTextEditInput) {
+  field-sizing: content;
+}
+
+:where(.inlineTextEditTarget) {
+  cursor: pointer;
+}
+
+.disabled {
+  cursor: default;
+  opacity: 0.6;
+}

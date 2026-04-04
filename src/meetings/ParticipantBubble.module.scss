@@ -1,0 +1,111 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.bubble {
+  border: 2px solid var(--bubble-color, white);
+  width: var(--size);
+  aspect-ratio: 1 / 1;
+  border-radius: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transform: translate(-50%, -50%);
+  animation: enter 0.5s cubic-bezier(.4, .4, 0, 1);
+  z-index: 990;
+}
+
+@keyframes enter {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 100%;
+  background-color: color-mix(in srgb, var(--bubble-color, white) calc(20% + var(--volume) * 25%), transparent);
+  transform: scale(calc(1.1 + var(--volume) * 0.25));
+  z-index: -1;
+}
+
+.mediaContainer {
+  flex: 1 1 0;
+  display: flex;
+  overflow: hidden;
+  border-radius: 100%;
+}
+
+.video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 0;
+
+  &.isFlipped {
+    transform: scaleX(-1);
+  }
+}
+
+.bubble.isGemini .video {
+  opacity: 0;
+}
+
+.geminiOrb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  .geminiSpark {
+    z-index: 99;
+    width: 40%;
+    height: 40%;
+    color: #fff;
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.label {
+  pointer-events: none;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 32px);
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: rgba(255 255 255 / 0.3);
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 500;
+  transition: transform 0.1s ease, background-color 0.1s ease, color 0.1s ease;
+
+  .bubble:hover & {
+    transform: translate(-50%, 16px);
+    background-color: var(--bubble-color, white);
+    color: black;
+    opacity: 1;
+  }
+}

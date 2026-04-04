@@ -1,0 +1,106 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.commentNode {
+  width: 36px;
+  height: 36px;
+  background-color: var(--gray-4);
+  border-radius: 50%;
+  border-bottom-left-radius: var(--radius-2);
+  outline: 1px solid var(--gray-8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all; // always clickable, even in comment mode
+
+  &.isSelected {
+    outline: 2px solid var(--accent-10);
+  }
+}
+
+.popover {
+  display: flex;
+  flex-direction: column;
+  max-height: 50vh;
+  max-width: 360px;
+  overflow-y: scroll;
+}
+
+.header {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--gray-6);
+  display: flex;
+  align-items: center;
+}
+
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.messages {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-bottom: 1px solid var(--gray-6);
+}
+
+.message {
+  display: grid;
+  grid-template:
+    "avatar author" auto
+    "avatar text" auto
+    / 32px auto;
+  gap: 0 12px;
+}
+
+.messageAvatar {
+  grid-area: avatar;
+}
+
+.messageAuthor {
+  grid-area: author;
+}
+
+.messageText {
+  grid-area: text;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.newMessageContainer {
+  position: relative;
+  display: flex;
+
+  .newMessageInput {
+    min-width: 320px;
+    border: 0;
+    width: 100%;
+    box-sizing: border-box;
+    field-sizing: content;
+    appearance: none;
+    font: inherit;
+    font-size: 14px;
+    line-height: 20px;
+    outline: 0;
+    background: transparent;
+    border-radius: 0;
+    appearance: none;
+    padding: 10px 48px 10px 16px;
+    resize: none;
+  }
+}
+
+.sendButton {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+}

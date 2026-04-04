@@ -1,0 +1,25 @@
+/**
+ * @license
+ * Copyright 2026 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@use '@/shared.lib' as lib;
+
+:where(.node) {
+  @include lib.card;
+  padding: 8px 16px;
+  font-size: 13px;
+  line-height: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  outline-offset: -1px;
+
+  &:hover {
+    outline: 1px solid rgba(255 255 255 / 0.4);
+  }
+
+  &.isSelected {
+    outline: 2px solid var(--accent-10);
+  }
+}
