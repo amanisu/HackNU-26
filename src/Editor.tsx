@@ -35,7 +35,7 @@ import { WakeWordRecognizer } from "@/live/WakeWordRecognizer";
 import { MeetingProvider } from "@/meetings/MeetingProvider";
 import { usePrefsContext } from "@/util/PrefsProvider";
 import { useWindowFocused } from "@/util/use-window-focused";
-import { VoiceChat } from "@/tools";
+import { VoiceAssistant } from "@/tools";
 import { IconButton, Spinner, Tooltip } from "@radix-ui/themes";
 import { Node } from "@xyflow/react";
 import cn from "classnames";
@@ -580,7 +580,29 @@ ${prompt}
             <Header />
             <main style={{ ["--split-size" as any]: `${splitSize}%` }}>
               <div className={styles.canvasContainer}>
-                <Canvas ref={canvasRef} onEditorReady={setEditor} />
+                <button
+                  onClick={() => signOut(auth)}
+                  style={{
+                    position: "fixed",
+                    top: 16,
+                    right: 16,
+                    zIndex: 9999,
+                    padding: "8px 12px",
+                    borderRadius: 8,
+                    border: "1px solid #ccc",
+                    background: "red",
+                    cursor: "pointer",
+                  }}
+                >
+                  Log out
+                </button>
+                <Canvas 
+                  ref={canvasRef} 
+                  onEditorReady={setEditor} 
+                  tldrawDocRef={child(docRef, "tldraw")}
+                />
+                console.log("[Editor] docRef path ready");
+                console.log("[Editor] tldraw ref =", child(docRef, "tldraw").toString());
                 {/* Voice Assistant */}
                 {editor && (
                   <div
