@@ -56,9 +56,14 @@ export type {
 export { useVoiceCanvas } from "./use-voice-canvas";
 export type { UseVoiceCanvasOptions, VoiceState } from "./use-voice-canvas";
 
+export { useTextToSpeech } from "./use-text-to-speech";
+export type { UseTextToSpeechOptions } from "./use-text-to-speech";
+
 // UI Components
 export { VoiceAssistant, default } from "./VoiceAssistant";
 export type { VoiceAssistantProps } from "./VoiceAssistant";
+export { VoiceChat } from "./VoiceChat";
+export type { VoiceChatProps } from "./VoiceChat";
 
 // Examples
 export {

@@ -7,6 +7,7 @@ import type { Editor } from "tldraw";
 import type { GoogleGenAI } from "@google/genai";
 import { ToolRegistry } from "./registry";
 import type { ParsedCommand } from "./voice-command-parser";
+import { getCanvasState, getSelectedShapesInfo } from "./canvas-util";
 
 export interface AICommanderOptions {
   editor: Editor;
@@ -33,8 +34,8 @@ export async function executeAICommand(
 
   // Get available tools
   const tools = registry.getToolSchemas();
-  const canvasOverview = getCanvasOverview(editor);
-  const selection = getSelectionInfo(editor);
+  const canvasState = getCanvasState(editor);
+  const selection = getSelectedShapesInfo(editor);
 
   const systemPrompt = `You are a canvas drawing and management AI assistant. The user can control a canvas with shapes and connections.
 
@@ -42,7 +43,8 @@ Available tools:
 ${tools.map((t) => `- ${t.name}: ${t.description}`).join("\n")}
 
 Current canvas state:
-${canvasOverview}
+${canvasState.description}
+(${canvasState.elementCount} shapes total)
 
 Current selection:
 ${selection}
@@ -55,16 +57,24 @@ For requests to draw/create/make shapes, ALWAYS use create_shape tool with:
 - width, height: 150 is good default
 - color: yellow, orange, red, violet, blue, green, black, grey, white, light-violet, light-blue, light-green, light-red
 - fill: "solid" for filled shapes
+- text: optional text to put inside the shape
 
 SHAPE MAPPINGS:
 - circle/круг → geo: "ellipse"
 - rectangle/прямоугольник/квадрат → geo: "rectangle"
-- triangle/треугольник → geo: "triangle"
+- triangle/треугольник → geo: "triangle"  
 - star/звезда → geo: "star"
 - heart/сердце → geo: "heart"
 - diamond/ромб → geo: "diamond"
 - pentagon → geo: "pentagon"
-- hexagon → geo: "hexagon"
+- hexagon/шестиугольник → geo: "hexagon"
+- octagon → geo: "octagon"
+- trapezoid/трапеция → geo: "trapezoid"
+- cloud/облако → geo: "cloud"
+- arrow-left/стрелка-влево → geo: "arrow-left"
+- arrow-right/стрелка-вправо → geo: "arrow-right"
+- arrow-up/стрелка-вверх → geo: "arrow-up"
+- arrow-down/стрелка-вниз → geo: "arrow-down"
 
 EXAMPLES:
 User: "draw a red circle"
@@ -83,9 +93,9 @@ Response: {
   }
 }
 
-User: "нарисуй фиолетовый треугольник"
+User: "нарисуй фиолетовый треугольник с текстом привет"
 Response: {
-  "understanding": "Нарисовать фиолетовый треугольник на холсте",
+  "understanding": "Нарисовать фиолетовый треугольник на холсте с текстом привет",
   "tool": "create_shape",
   "params": {
     "type": "geo",
@@ -95,7 +105,8 @@ Response: {
     "width": 150,
     "height": 150,
     "color": "violet",
-    "fill": "solid"
+    "fill": "solid",
+    "text": "привет"
   }
 }
 
@@ -161,55 +172,5 @@ When the user gives a command:
       response: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       error: error instanceof Error ? error.message : "Unknown error",
     };
-  }
-}
-
-function getCanvasOverview(editor: Editor): string {
-  try {
-    const shapes = (editor as any).getShapes?.() || [];
-    const count = shapes.length;
-
-    const breakdown = shapes.reduce(
-      (acc: Record<string, number>, shape: any) => {
-        acc[shape.type] = (acc[shape.type] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-
-    return `
-Total shapes: ${count}
-Types: ${Object.entries(breakdown)
-      .map(([type, count]) => `${count} ${type}s`)
-      .join(", ")}
-`;
-  } catch {
-    return "Unable to get canvas overview";
-  }
-}
-
-function getSelectionInfo(editor: Editor): string {
-  try {
-    const selected = (editor as any).getSelectedShapes?.() || [];
-    if (selected.length === 0) {
-      return "Nothing selected";
-    }
-
-    const types = selected.reduce(
-      (acc: Record<string, number>, shape: any) => {
-        acc[shape.type] = (acc[shape.type] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-
-    return `
-Selected: ${selected.length} shape(s)
-Types: ${Object.entries(types)
-      .map(([type, count]) => `${count} ${type}`)
-      .join(", ")}
-`;
-  } catch {
-    return "Unable to get selection info";
   }
 }

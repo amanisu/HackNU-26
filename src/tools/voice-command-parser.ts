@@ -226,127 +226,85 @@ function matchQuickCommand(
       }),
     },
 
-    // Drawing commands - COLOR + SHAPE patterns (MUST BE FIRST to extract colors properly)
+    // Write/Type text command
     {
       regex:
-        /(?:draw|рисуй|нарисуй|create).*(?:red|красн).*(?:circle|круг|окружность)/i,
-      build: () => buildDrawCommand("ellipse", "red", context),
-    },
-    {
-      regex:
-        /(?:draw|рисуй|нарисуй|create).*(?:red|красн).*(?:rectangle|прямоугольник|квадрат|box)/i,
-      build: () => buildDrawCommand("rectangle", "red", context),
-    },
-    {
-      regex:
-        /(?:draw|рисуй|нарисуй|create).*(?:red|красн).*(?:triangle|треугольник)/i,
-      build: () => buildDrawCommand("triangle", "red", context),
-    },
-    {
-      regex: /(?:draw|рисуй|нарисуй|create).*(?:red|красн).*(?:star|звезда)/i,
-      build: () => buildDrawCommand("star", "red", context),
-    },
-    {
-      regex: /(?:draw|рисуй|нарисуй|create).*(?:red|красн).*(?:heart|сердце)/i,
-      build: () => buildDrawCommand("heart", "red", context),
-    },
-
-    {
-      regex:
-        /(?:draw|рисуй|нарисуй|create).*(?:blue|голубой|синий).*(?:circle|круг|окружность)/i,
-      build: () => buildDrawCommand("ellipse", "blue", context),
-    },
-    {
-      regex:
-        /(?:draw|рисуй|нарисуй|create).*(?:blue|голубой|синий).*(?:rectangle|прямоугольник|квадрат|box)/i,
-      build: () => buildDrawCommand("rectangle", "blue", context),
-    },
-    {
-      regex:
-        /(?:draw|рисуй|нарисуй|create).*(?:blue|голубой|синий).*(?:triangle|треугольник)/i,
-      build: () => buildDrawCommand("triangle", "blue", context),
-    },
-
-    {
-      regex: /(?:draw|рисуй|нарисуй|create).*(?:green|зелёный|зеленый)/i,
+        /(?:write|type|тип|пиши|напиши|написать)\s+(?:a\s+)?text\s+(.+)|(?:write|type|тип|пиши|напиши|написать)\s+(.+)/i,
       build: (match) => {
-        if (/(circle|круг)/.test(match[0]))
-          return buildDrawCommand("ellipse", "green", context);
-        if (/(triangle|треугольник)/.test(match[0]))
-          return buildDrawCommand("triangle", "green", context);
-        if (/(star|звезда)/.test(match[0]))
-          return buildDrawCommand("star", "green", context);
-        return buildDrawCommand("rectangle", "green", context);
+        let text = match[1] || match[2] || "";
+        text = text
+          .trim()
+          .replace(/^["'\s]+|["'\s]+$/g, "")
+          .substring(0, 50); // Limit to 50 chars
+
+        if (!text) {
+          return null;
+        }
+
+        return {
+          toolName: "create_shape",
+          params: {
+            type: "text",
+            text: text,
+            x: Math.random() * 300 + 50,
+            y: Math.random() * 300 + 50,
+            color: "black",
+          },
+          confidence: 0.85,
+          explanation: `Write text: "${text}"`,
+        };
       },
     },
 
-    {
-      regex: /(?:draw|рисуй|нарисуй|create).*(?:yellow|жёлт|жёлт)/i,
-      build: (match) => {
-        if (/(circle|круг)/.test(match[0]))
-          return buildDrawCommand("ellipse", "yellow", context);
-        if (/(triangle|треугольник)/.test(match[0]))
-          return buildDrawCommand("triangle", "yellow", context);
-        if (/(star|звезда)/.test(match[0]))
-          return buildDrawCommand("star", "yellow", context);
-        return buildDrawCommand("rectangle", "yellow", context);
-      },
-    },
-
-    {
-      regex: /(?:draw|рисуй|нарисуй|create).*(?:violet|фиолет|purple|пурпур)/i,
-      build: (match) => {
-        if (/(circle|круг|окружность)/.test(match[0]))
-          return buildDrawCommand("ellipse", "violet", context);
-        if (/(triangle|треугольник)/.test(match[0]))
-          return buildDrawCommand("triangle", "violet", context);
-        if (/(star|звезда)/.test(match[0]))
-          return buildDrawCommand("star", "violet", context);
-        if (/(heart|сердце)/.test(match[0]))
-          return buildDrawCommand("heart", "violet", context);
-        return buildDrawCommand("rectangle", "violet", context);
-      },
-    },
-
-    {
-      regex: /(?:draw|рисуй|нарисуй|create).*(?:orange|оранжев)/i,
-      build: (match) => {
-        if (/(circle|круг)/.test(match[0]))
-          return buildDrawCommand("ellipse", "orange", context);
-        if (/(triangle|треугольник)/.test(match[0]))
-          return buildDrawCommand("triangle", "orange", context);
-        return buildDrawCommand("rectangle", "orange", context);
-      },
-    },
-
+    // Drawing commands - Universal pattern for all colors + shapes
     {
       regex:
-        /(?:draw|рисуй|нарисуй|create).*(?:black|чёрн|черн|grey|gray|серый|сер)/i,
+        /(?:draw|рисуй|нарисуй|create).*(?:red|красн|blue|синий|голубой|green|зелён|зелен|yellow|жёлт|violet|фиолет|purple|orange|оранжев|black|чёрн|черн|grey|gray|серый|white|белый).*(?:circle|круг|окружность|rectangle|прямоугольник|квадрат|box|triangle|треугольник|star|звезда|heart|сердце|diamond|ромб|rhombus|hexagon|шестиугольник|pentagon|пятиугольник|octagon|восьмиугольник|trapezoid|трапеция|x-box|х-box|check-?box|arrow\s*(?:left|right|up|down)|arrow-(?:left|right|up|down)|стрелка\s*(?:влево|вправо|вверх|вниз)|стрелка-(?:влево|вправо|вверх|вниз)|cloud|облако|line)/i,
       build: (match) => {
-        if (/(circle|круг)/.test(match[0]))
-          return buildDrawCommand("ellipse", "black", context);
-        if (/(triangle|треугольник)/.test(match[0]))
-          return buildDrawCommand("triangle", "black", context);
-        return buildDrawCommand("rectangle", "black", context);
+        const cmd = match[0];
+
+        // Extract color
+        const colorMatch = cmd.match(
+          /(?:red|красн|blue|синий|голубой|green|зелён|зелен|yellow|жёлт|violet|фиолет|purple|orange|оранжев|black|чёрн|черн|grey|gray|серый|white|белый)/i,
+        );
+        const colorName = colorMatch ? colorMatch[0] : "black";
+        const color = mapColorNames(colorName);
+
+        // Extract shape - prioritize arrows with spaces/dashes
+        let shapeMatch = cmd.match(
+          /arrow\s*(?:left|right|up|down)|arrow-(?:left|right|up|down)|стрелка\s*(?:влево|вправо|вверх|вниз)|стрелка-(?:влево|вправо|вверх|вниз)/i,
+        );
+        if (!shapeMatch) {
+          shapeMatch = cmd.match(
+            /(?:circle|круг|окружность|rectangle|прямоугольник|квадрат|box|triangle|треугольник|star|звезда|heart|сердце|diamond|ромб|rhombus|hexagon|шестиугольник|pentagon|пятиугольник|octagon|восьмиугольник|trapezoid|трапеция|x-box|х-box|check-?box|cloud|облако|line)/i,
+          );
+        }
+        const shapeName = shapeMatch ? shapeMatch[0] : "rectangle";
+        const shapeType = mapShapeNames(shapeName);
+
+        return buildDrawCommand(shapeType, color, context, cmd);
       },
     },
 
     // Drawing commands - Simple shapes WITHOUT colors (fallback)
     {
-      regex: /(?:draw|рисуй|нарисуй).*(?:circle|круг|окружность)/i,
-      build: () => buildDrawCommand("ellipse", "black", context),
-    },
-    {
-      regex: /(?:draw|рисуй|нарисуй).*(?:rectangle|прямоугольник|квадрат|box)/i,
-      build: () => buildDrawCommand("rectangle", "black", context),
-    },
-    {
-      regex: /(?:draw|рисуй|нарисуй).*(?:triangle|треугольник)/i,
-      build: () => buildDrawCommand("triangle", "black", context),
-    },
-    {
-      regex: /(?:draw|рисуй|нарисуй).*(?:star|звезда)/i,
-      build: () => buildDrawCommand("star", "black", context),
+      regex:
+        /(?:draw|рисуй|нарисуй).*(?:circle|круг|окружность|rectangle|прямоугольник|квадрат|triangle|треугольник|star|звезда|heart|сердце|diamond|ромб|hexagon|pentagon|octagon|trapezoid|arrow|стрелка|cloud|облако|line)/i,
+      build: (match) => {
+        const cmd = match[0];
+        let shapeMatch = cmd.match(
+          /arrow\s*(?:left|right|up|down)|arrow-(?:left|right|up|down)|стрелка\s*(?:влево|вправо|вверх|вниз)|стрелка-(?:влево|вправо|вверх|вниз)/i,
+        );
+        if (!shapeMatch) {
+          shapeMatch = cmd.match(
+            /(?:circle|круг|окружность|rectangle|прямоугольник|квадрат|triangle|треугольник|star|звезда|heart|сердце|diamond|ромб|hexagon|pentagon|octagon|trapezoid|cloud|облако|line)/i,
+          );
+        }
+        const shapeName = shapeMatch ? shapeMatch[0] : "rectangle";
+        const shapeType = mapShapeNames(shapeName);
+
+        return buildDrawCommand(shapeType, "black", context, cmd);
+      },
     },
   ];
 
@@ -354,21 +312,142 @@ function matchQuickCommand(
     const match = pattern.regex.exec(command);
     if (match) {
       const result = pattern.build(match, context);
-      if (result) return result;
+      if (result) {
+        // DEBUG: Log which pattern matched
+        console.log("🎯 Pattern matched:", result.explanation);
+        return result;
+      }
     }
   }
 
   return null;
 }
 
+function extractTextFromCommand(command: string): string {
+  // Extract text from patterns like:
+  // "draw red circle that says hello"
+  // "red circle with text hello"
+  // "red circle labeled hello"
+  // "violet star с текстом привет"
+  // "blue arrow-left label start"
+
+  const patterns = [
+    // English patterns: "that says", "with text", "labeled", "label"
+    /(?:that\s+says?|with\s+text|labeled|label)\s+([^\s][^\n]*?)(?:\s+(?:that|with|label)|$)/i,
+    /(?:that\s+says?|with\s+text|labeled|label)\s+([^\s][^\n]*?)$/i,
+
+    // Russian patterns: "с текстом", "говорит", "подписано"
+    /(?:с\s+текстом|говорит)\s+([^\s][^\n]*?)(?:\s+(?:с\s+текстом|говорит)|$)/i,
+    /(?:с\s+текстом|говорит)\s+([^\s][^\n]*?)$/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = command.match(pattern);
+    if (match && match[1]) {
+      const text = match[1]
+        .trim()
+        .replace(/^["'\s]+|["'\s]+$/g, "")
+        .replace(/\b(that|with|label|labeled|говорит|с|текстом)\b/gi, "")
+        .trim();
+
+      if (text && text.length > 0) {
+        return text;
+      }
+    }
+  }
+  return "";
+}
+
+function mapShapeNames(shapeName: string): string {
+  const map: Record<string, string> = {
+    circle: "ellipse",
+    круг: "ellipse",
+    окружность: "ellipse",
+    rectangle: "rectangle",
+    прямоугольник: "rectangle",
+    квадрат: "rectangle",
+    box: "rectangle",
+    triangle: "triangle",
+    треугольник: "triangle",
+    star: "star",
+    звезда: "star",
+    heart: "heart",
+    сердце: "heart",
+    diamond: "diamond",
+    rhombus: "rhombus",
+    ромб: "diamond",
+    hexagon: "hexagon",
+    шестиугольник: "hexagon",
+    pentagon: "pentagon",
+    пятиугольник: "pentagon",
+    octagon: "octagon",
+    восьмиугольник: "octagon",
+    trapezoid: "trapezoid",
+    трапеция: "trapezoid",
+    "x-box": "x-box",
+    "х-box": "x-box",
+    "check-box": "x-box",
+    checkbox: "x-box",
+    "arrow-left": "arrow-left",
+    "стрелка-влево": "arrow-left",
+    "arrow-right": "arrow-right",
+    "стрелка-вправо": "arrow-right",
+    "arrow-up": "arrow-up",
+    "стрелка-вверх": "arrow-up",
+    "arrow-down": "arrow-down",
+    "стрелка-вниз": "arrow-down",
+    cloud: "cloud",
+    облако: "cloud",
+    line: "arrow-right", // line as arrow
+  };
+  return map[shapeName.toLowerCase()] || "rectangle";
+}
+
+function mapColorNames(colorName: string): string {
+  const map: Record<string, string> = {
+    red: "red",
+    красный: "red",
+    красн: "red",
+    красная: "red",
+    blue: "blue",
+    синий: "blue",
+    синяя: "blue",
+    голубой: "blue",
+    green: "green",
+    зелёный: "green",
+    зеленый: "green",
+    yellow: "yellow",
+    жёлтый: "yellow",
+    жёлтая: "yellow",
+    violet: "violet",
+    фиолетовый: "violet",
+    фиолет: "violet",
+    purple: "violet",
+    orange: "orange",
+    оранжевый: "orange",
+    black: "black",
+    чёрный: "black",
+    черный: "black",
+    grey: "grey",
+    gray: "grey",
+    серый: "grey",
+    white: "white",
+    белый: "white",
+  };
+  return map[colorName.toLowerCase()] || "black";
+}
+
 function buildDrawCommand(
   shapeType: string,
   color: string,
-  context: VoiceCommandContext,
+  _context: VoiceCommandContext,
+  fullCommand?: string,
 ): ParsedCommand {
   // Get random position in canvas (visually better UX)
   const x = Math.random() * 300 + 50;
   const y = Math.random() * 300 + 50;
+
+  const text = fullCommand ? extractTextFromCommand(fullCommand) : "";
 
   return {
     toolName: "create_shape",
@@ -381,9 +460,10 @@ function buildDrawCommand(
       height: 150,
       color: color,
       fill: "solid",
+      ...(text && { text }),
     },
     confidence: 0.95,
-    explanation: `Draw a ${color} ${shapeType}`,
+    explanation: `Draw a ${color} ${shapeType}${text ? ` saying "${text}"` : ""}`,
   };
 }
 

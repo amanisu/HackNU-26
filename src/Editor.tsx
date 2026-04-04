@@ -35,7 +35,7 @@ import { WakeWordRecognizer } from "@/live/WakeWordRecognizer";
 import { MeetingProvider } from "@/meetings/MeetingProvider";
 import { usePrefsContext } from "@/util/PrefsProvider";
 import { useWindowFocused } from "@/util/use-window-focused";
-import { VoiceAssistant } from "@/tools";
+import { VoiceChat } from "@/tools";
 import { IconButton, Spinner, Tooltip } from "@radix-ui/themes";
 import { Node } from "@xyflow/react";
 import cn from "classnames";
@@ -579,39 +579,8 @@ ${prompt}
             <main style={{ ["--split-size" as any]: `${splitSize}%` }}>
               <div className={styles.canvasContainer}>
                 <Canvas ref={canvasRef} onEditorReady={setEditor} />
-                {/* Voice Assistant */}
-                {editor && (
-                  <div
-                    style={{
-                      position: "fixed",
-                      bottom: "2rem",
-                      right: "2rem",
-                      zIndex: "1000",
-                    }}
-                  >
-                    <VoiceAssistant editor={editor} useAI={true} />
-                  </div>
-                )}
-                {/* Only Ask Gemini button - moved to top right */}
-                <div className={styles.geminiButtonContainer}>
-                  {!aiGenerating && (
-                    <Command label="Ask Gemini" keyName="g">
-                      <LiveButton className={styles.geminiButton} />
-                    </Command>
-                  )}
-                  {aiGenerating && (
-                    <Tooltip content="Generating... (Click to stop)">
-                      <IconButton
-                        radius="full"
-                        // @ts-expect-error
-                        color={"accent"}
-                        variant="solid"
-                      >
-                        <Spinner size="2" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </div>
+                {/* Voice Chat - Minimal circular button */}
+                {editor && <VoiceChat editor={editor} useAI={true} />}
               </div>
               {inspectingNode && (
                 <>
