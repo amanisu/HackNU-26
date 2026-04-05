@@ -1,0 +1,96 @@
+.meetingChat {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  width: 320px;
+  max-height: 340px;
+  overflow: hidden;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  background: #f7f7fa;
+}
+
+.myMessage {
+  align-self: flex-end;
+  background: #e0f7fa;
+  color: #00796b;
+  border-radius: 8px 8px 2px 8px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  max-width: 80%;
+  font-size: 0.97em;
+}
+
+.otherMessage {
+  align-self: flex-start;
+  background: #ececec;
+  color: #333;
+  border-radius: 8px 8px 8px 2px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  max-width: 80%;
+  font-size: 0.97em;
+}
+
+.sender {
+  display: block;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: #888;
+}
+
+.text {
+  word-break: break-word;
+}
+
+.time {
+  display: block;
+  font-size: 0.75em;
+  color: #aaa;
+  margin-top: 2px;
+  text-align: right;
+}
+
+.inputForm {
+  display: flex;
+  border-top: 1px solid #eee;
+  background: #fff;
+  padding: 8px;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 1em;
+  background: #f2f2f2;
+  margin-right: 8px;
+}
+
+.input:focus {
+  outline: none;
+  background: #e0e0e0;
+}
+
+.sendButton {
+  background: #00796b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sendButton:hover {
+  background: #005a4f;
+}

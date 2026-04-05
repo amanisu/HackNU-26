@@ -33,6 +33,8 @@ import { LiveAPI, LiveAPIContext } from "@/live/LiveAPI";
 import LiveButton from "@/live/LiveButton";
 import { WakeWordRecognizer } from "@/live/WakeWordRecognizer";
 import { MeetingProvider } from "@/meetings/MeetingProvider";
+import { MeetingChatContainer } from "@/meetings/MeetingChatContainer";
+import { AssistantChatTabs } from "@/meetings/AssistantChatTabs";
 import { usePrefsContext } from "@/util/PrefsProvider";
 import { useWindowFocused } from "@/util/use-window-focused";
 import { VoiceAssistant } from "@/tools";
@@ -596,14 +598,14 @@ ${prompt}
                 >
                   Log out
                 </button>
-                <Canvas 
-                  ref={canvasRef} 
-                  onEditorReady={setEditor} 
+                <Canvas
+                  ref={canvasRef}
+                  onEditorReady={setEditor}
                   tldrawDocRef={child(docRef, "tldraw")}
                 />
                 console.log("[Editor] docRef path ready");
                 console.log("[Editor] tldraw ref =", child(docRef, "tldraw").toString());
-                {/* Voice Assistant */}
+                {/* Assistant + Chat Tabs */}
                 {editor && (
                   <div
                     style={{
@@ -613,7 +615,7 @@ ${prompt}
                       zIndex: "1000",
                     }}
                   >
-                    <VoiceAssistant editor={editor} useAI={true} />
+                    <AssistantChatTabs editor={editor} meetingRef={child(docRef, "meeting")} />
                   </div>
                 )}
                 {/* Only Ask Gemini button - moved to top right */}
