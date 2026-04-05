@@ -24,8 +24,13 @@ export class ToolRegistry {
   private tools: Map<string, ToolDefinition> = new Map()
   private editor: Editor | null = null
 
+  static instance: ToolRegistry;
   constructor() {
-    this.registerDefaults()
+    this.registerDefaults();
+    if (!ToolRegistry.instance) {
+      ToolRegistry.instance = this;
+    }
+    return ToolRegistry.instance;
   }
 
   setEditor(editor: Editor) {
@@ -109,4 +114,5 @@ export class ToolRegistry {
 }
 
 // Singleton
-export const toolRegistry = new ToolRegistry()
+ToolRegistry.instance = new ToolRegistry();
+export const toolRegistry = ToolRegistry.instance;

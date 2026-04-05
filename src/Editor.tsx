@@ -618,26 +618,7 @@ ${prompt}
                     <AssistantChatTabs editor={editor} meetingRef={child(docRef, "meeting")} />
                   </div>
                 )}
-                {/* Only Ask Gemini button - moved to top right */}
-                <div className={styles.geminiButtonContainer}>
-                  {!aiGenerating && (
-                    <Command label="Ask Gemini" keyName="g">
-                      <LiveButton className={styles.geminiButton} />
-                    </Command>
-                  )}
-                  {aiGenerating && (
-                    <Tooltip content="Generating... (Click to stop)">
-                      <IconButton
-                        radius="full"
-                        // @ts-expect-error
-                        color={"accent"}
-                        variant="solid"
-                      >
-                        <Spinner size="2" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </div>
+                {/* Gemini orb button removed as requested */}
               </div>
               {inspectingNode && (
                 <>

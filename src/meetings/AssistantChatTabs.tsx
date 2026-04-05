@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import styles from "./AssistantChatTabs.module.scss";
-import { VoiceAssistant } from "@/tools";
+import GeminiTextPanel from "./GeminiTextPanel";
 import { MeetingChatContainer } from "./MeetingChatContainer";
 import type { Editor } from "tldraw";
-import { child } from "firebase/database";
 
 interface AssistantChatTabsProps {
   editor: Editor;
@@ -11,16 +10,24 @@ interface AssistantChatTabsProps {
 }
 
 export const AssistantChatTabs: React.FC<AssistantChatTabsProps> = ({ editor, meetingRef }) => {
-  const [tab, setTab] = useState<"assistant" | "chat">("assistant");
+  const [tab, setTab] = useState<"gemini" | "chat">("gemini");
+  const [visible, setVisible] = useState(true);
+
+  if (!visible) {
+    return (
+      <button className={styles.showBtn} onClick={() => setVisible(true)} title="Show Assistant">☉</button>
+    );
+  }
 
   return (
     <div className={styles.tabsWindow}>
+      <button className={styles.closeBtn} onClick={() => setVisible(false)} title="Close">×</button>
       <div className={styles.tabsHeader}>
         <button
-          className={tab === "assistant" ? styles.active : ""}
-          onClick={() => setTab("assistant")}
+          className={tab === "gemini" ? styles.active : ""}
+          onClick={() => setTab("gemini")}
         >
-          Assistant
+          Gemini
         </button>
         <button
           className={tab === "chat" ? styles.active : ""}
@@ -30,8 +37,8 @@ export const AssistantChatTabs: React.FC<AssistantChatTabsProps> = ({ editor, me
         </button>
       </div>
       <div className={styles.tabsContent}>
-        {tab === "assistant" ? (
-          <VoiceAssistant editor={editor} useAI={true} />
+        {tab === "gemini" ? (
+          <GeminiTextPanel editor={editor} />
         ) : (
           <MeetingChatContainer meetingRef={meetingRef} />
         )}

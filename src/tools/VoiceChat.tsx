@@ -6,10 +6,8 @@
 import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import type { Editor } from "tldraw";
-import GeminiIcon from "@/icons/GeminiIcon";
 import { useVoiceCanvas } from "./use-voice-canvas";
 import { useTextToSpeech } from "./use-text-to-speech";
-import styles from "./VoiceChat.module.scss";
 
 export interface VoiceChatProps {
   editor?: Editor;
@@ -20,15 +18,14 @@ export const VoiceChat: React.FC<VoiceChatProps> = ({
   editor,
   useAI = true,
 }) => {
-  const { isListening, isProcessing, lastCommand, toggleListening } =
-    useVoiceCanvas({ editor, useAI });
+  const { lastCommand } = useVoiceCanvas({ editor, useAI });
 
   const { speak } = useTextToSpeech({
     lang: "en-US",
     rate: 1,
   });
 
-  const [isSpeakingState, setIsSpeakingState] = useState(false);
+  const [, setIsSpeakingState] = useState(false);
   const lastCommandRefRef = useRef<string>("");
 
   // Speak the result when a command completes
@@ -52,20 +49,7 @@ export const VoiceChat: React.FC<VoiceChatProps> = ({
     }
   }, [lastCommand, speak]);
 
-  return (
-    <>
-      {/* Floating circular button */}
-      <button
-        className={`${styles.floatingButton} ${isListening ? styles.listening : ""} ${
-          isProcessing ? styles.processing : ""
-        } ${isSpeakingState ? styles.speaking : ""}`}
-        onClick={toggleListening}
-        title="Tap to speak"
-      >
-        <GeminiIcon size={28} />
-      </button>
-    </>
-  );
+  return null;
 };
 
 export default VoiceChat;
